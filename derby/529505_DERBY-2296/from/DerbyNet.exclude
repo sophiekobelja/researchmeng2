@@ -1,0 +1,29 @@
+# excluding resultsetStream.java because this test uses java.io.FileInputStream throughout the test
+# excluding TestErrorStreamTarget.java since it's not relevant for clients
+# excluding statementJdbc20.java because this tests fetch_reverse throughout the test
+# excluding jdbcapi/testRelative.java because this is a new test contributed by Shreyas Kaushik and needs to be debugged with JCC  in order to get it running with network server
+# excluding jdbcapi/SetQueryTimeoutTest.java because neither the JCC driver nor the ClientDriver support setQueryTimeout() yet.
+# excluding jdbcapi/rsgetXXXcolumnNames.java as it fails incorrectly, according to JDBC spec. Forwarding test case to JCC team.
+# excluding jdbcapi/statementJdbc30.java - Client behaves differently. Need to look into this
+# excluding jdbcapi/dataSourceReference.java - client side only tests, tests all data sources
+#           regardless of framework
+# excluding largedata/LobLimits.java to run with the network server because currently lobs are materialized and this test tests for 2G lobs.
+# 			see DERBY-326 and DERBY-550 issues
+jdbcapi/resultsetStream.java
+lang/errorStream.java
+jdbcapi/statementJdbc20.java
+jdbcapi/testRelative.java
+jdbcapi/rsgetXXXcolumnNames.java
+jdbcapi/SetQueryTimeoutTest.java
+jdbcapi/blobSetBinaryStream.java
+jdbcapi/statementJdbc30.java
+jdbcapi/dataSourceReference.java
+#no XA for JCC
+jdbcapi/savepointJdbc30_XA.java
+# excluding jdbcapi/derbyStress.java - jcc runs out of memory with this test
+jdbcapi/derbyStress.java
+largedata/LobLimits.java
+jdbcapi/SURTest_ij.sql
+# Excluding ResultSetClose test since an exception in a statement results in all
+# the result sets associated with the connection closing
+jdbcapi/ResultSetCloseTest.junit

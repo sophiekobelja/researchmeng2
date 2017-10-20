@@ -1,0 +1,415 @@
+<?xml version="1.0"?>
+<!--
+  Licensed to the Apache Software Foundation (ASF) under one or more
+  contributor license agreements.  See the NOTICE file distributed with
+  this work for additional information regarding copyright ownership.
+  The ASF licenses this file to you under the Apache License, Version 2.0
+  (the "License"); you may not use this file except in compliance with
+  the License.  You may obtain a copy of the License at
+
+      http://www.apache.org/licenses/LICENSE-2.0
+
+  Unless required by applicable law or agreed to in writing, software
+  distributed under the License is distributed on an "AS IS" BASIS,
+  WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  See the License for the specific language governing permissions and
+  limitations under the License.
+-->
+
+<project default="release" basedir="../..">
+
+<!-- Set Properties -->
+  <!-- User settings -->
+  <property file="${user.home}/ant.properties"/>
+  <!-- Set property lib dir -->
+  <property name="properties.dir" value="tools/ant/properties"/>
+  <!-- Significant dirs -->
+  <property file="${properties.dir}/dirs.properties"/>
+  <!-- Compiler settings -->
+  <property file="${properties.dir}/sane${sanity}.properties"/>
+  <property file="${properties.dir}/defaultcompiler.properties"/>
+  <property file="${properties.dir}/${build.compiler}.properties"/>
+  <!-- Compile-time classpath properties files -->
+  <property file="${properties.dir}/extrapath.properties"/>
+  <property file="${properties.dir}/compilepath.properties"/>
+  <!-- Release and version info -->
+  <property file="${properties.dir}/release.properties"/>
+  <property file="${properties.dir}/packaging.properties"/>
+
+
+  <!-- Files to be included with and excluded from the source distribution -->
+  <property name="src.top.includes" value="BUILDING.txt,README,CHANGES,COPYRIGHT,KEYS,LICENSE,NOTICE,RELEASE-NOTES.html,STATUS,build.xml,frameworks.DEPRECATED.txt,index.html,published_api_overview.html"/>
+  <property name="src.tools.includes" value="tools/ant/**,tools/j2ee/**,tools/jar/**,tools/java/**,tools/javadoc/**,tools/jdbc4/**,tools/testing/**,tools/release/build.xml"/>
+  <property name="src.dirs.includes" value="frameworks/**,java/**,plugins/**,bin/**,maven/**"/>
+  <property name="src.includes" value="${src.top.includes},${src.tools.includes},${src.dirs.includes}"/>
+
+  <property name="src.excludes" value="tools/**/db2jcc*,tools/**/osgi.jar,tools/**/junit.jar,tools/**/jdbc2_0*,tools/java/jce*,tools/**/packaging.properties,java/demo/toursdb/toursdb/**,java/demo/toursdb/toursdb.out,java/demo/toursdb/toursdb.jar,tools/testing/derby/**,**/derby.log"/>
+
+<!-- These properties are used by the Release Notes Generator. -->
+
+  <property name="relnotes.src.summary" value="${basedir}/releaseSummary.xml" />
+  <property name="relnotes.src.buglist" value="${relnotes.src.reports}/fixedBugsList.xml" />
+  <property name="relnotes.src.notes" value="${relnotes.src.reports}/releaseNotesList.xml" />
+  <property name="relnotes.out.pamphlet" value="${basedir}/RELEASE-NOTES.html" />
+
+<!-- Define the task which generates the release notes -->
+  <taskdef
+    name="generateReleaseNotes"
+    classname="org.apache.derbyBuild.ReleaseNotesGenerator"
+    classpath="${out.dir}"
+  />
+
+<!-- Targets -->
+
+  <target name="release" depends="clean,bin,lib,lib-debug,src"/>
+
+  <target name="init">
+
+    <java classname="org.apache.derbyBuild.maintversion2props">
+        <classpath path="${out.dir}"/>
+        <arg value="${out.dir}/org/apache/derby/info/DBMS.properties"/>
+        <arg value="maintversion.properties"/>
+    </java>
+	
+    <property file="${release.dir}/maintversion.properties"/>
+    <property name="derby.basename" value="db-derby-${major}.${minor}.${interim}.${point}"/>
+    <property name="derby.bin" value="${derby.basename}-bin"/>
+    <property name="derby.lib" value="${derby.basename}-lib"/>
+    <property name="derby.lib-debug" value="${derby.basename}-lib-debug"/>
+    <property name="derby.src" value="${derby.basename}-src"/> 
+
+    <property name="crlf.dir" value="${basedir}/tools/release/crlf"/>
+    <property name="lf.dir" value="${basedir}/tools/release/lf"/>
+    <mkdir dir="${crlf.dir}"/>
+    <mkdir dir="${lf.dir}"/>
+    <fixcrlf srcdir="${basedir}" destdir="${crlf.dir}" eol="crlf"
+             includes="CHANGES,COPYRIGHT,LICENSE,KEYS,NOTICE,RELEASE-NOTES.html,frameworks.DEPRECATED.txt"/>
+    <fixcrlf srcdir="${basedir}" destdir="${lf.dir}" eol="lf"
+             includes="CHANGES,COPYRIGHT,LICENSE,KEYS,NOTICE,RELEASE-NOTES.html,frameworks.DEPRECATED.txt"/>
+
+  </target>
+
+<!--
+   Generate the Release Notes
+
+   The ${relnotes.src.reports} property must point at a
+   directory containing the two JIRA reports:
+
+     fixedBugsList.xml  - This is a JIRA xml report of issues fixed in the release.
+
+     releaseNotesList.xml - This is a JIRA xml report of issues having detailed release notes.
+-->
+  <target name="genrelnotes">
+
+     <generateReleaseNotes
+       summaryFileName="${relnotes.src.summary}"
+       bugListFileName="${relnotes.src.buglist}"
+       releaseNotesListFileName="${relnotes.src.notes}"
+       pamphletFileName="${relnotes.out.pamphlet}"
+     />
+
+  </target>
+
+  <!-- bin distribution -->
+  <target name="bin" depends="bin.zip,bin.tgz"/>
+  <target name="bin.zip" depends="init">    
+    <zip destfile="${release.dir}/${derby.bin}.zip"
+         compress="true">
+      <!-- top-level -->
+      <zipfileset dir="${crlf.dir}" includes="CHANGES,COPYRIGHT,LICENSE,KEYS,NOTICE,RELEASE-NOTES.html,frameworks.DEPRECATED.txt"
+                  prefix="${derby.bin}/"/>
+      <zipfileset dir="${basedir}" includes="index.html" prefix="${derby.bin}/"/>
+      <!-- bin -->
+      <zipfileset dir="${basedir}/bin" prefix="${derby.bin}/bin" 
+                  filemode="755" includes="*"/>
+      <!-- demo -->
+      <zipfileset dir="${derby.demo.src.dir}" prefix="${derby.bin}/demo/programs" 
+                  excludes="**/build.xml,toursdb/toursdb**,toursdb/derby.log"/>
+      <zipfileset file="${derby.demo.src.dir}/toursdb/toursdb.xml"
+                  fullpath="${derby.bin}/demo/programs/toursdb/build.xml"/>
+      <zipfileset file="${derby.demo.src.dir}/toursdb/toursdb_readme.html"
+                  fullpath="${derby.bin}/demo/programs/toursdb/toursdb_readme.html"/>
+      <zipfileset file="${derby.drda.dir}/drda/template.policy"
+                  fullpath="${derby.bin}/demo/templates/server.policy"/>
+      <zipfileset dir="${basedir}/classes" includes="SimpleApp.class"
+                  prefix="${derby.bin}/demo/programs/simple"/>
+      <zipfileset dir="${basedir}/classes" includes="SimpleNetwork*.class"
+                  prefix="${derby.bin}/demo/programs/nserverdemo"/>
+      <zipfileset dir="${basedir}/classes/nserverdemo" includes="*.class"
+                  prefix="${derby.bin}/demo/programs/nserverdemo"/>
+      <zipfileset dir="${basedir}/java/demo/toursdb" includes="toursdb/**,toursdb.jar"
+                  prefix="${derby.bin}/demo/databases"/>
+      <zipfileset dir="${basedir}/classes" includes="Wwd*.class"
+                  prefix="${derby.bin}/demo/programs/workingwithderby"/>
+
+      <!-- docs -->
+      <zipfileset dir="${docs.out}" includes="**/*.html,**/*.jpg,**/*.gif"
+                  prefix="${derby.bin}/docs/html"/>
+      <zipfileset dir="${docs.out}" includes="**/*.pdf"
+                  prefix="${derby.bin}/docs/pdf"/>
+      <!-- frameworks -->
+      <zipfileset dir="${basedir}/frameworks" prefix="${derby.bin}/frameworks" includes="**/*.html"/> 
+      <zipfileset dir="${basedir}/frameworks" prefix="${derby.bin}/frameworks" includes="**/bin/*" filemode="755"/> 
+      <!-- javadoc -->
+      <zipfileset dir="${basedir}/javadoc/publishedapi" prefix="${derby.bin}/javadoc" includes="**"/>   
+      <!-- lib -->
+      <zipfileset dir="${basedir}/jars/insane" prefix="${derby.bin}/lib" includes="derby*.*"
+	          excludes="derby_core_plugin*,derbyTesting.jar"/>
+      <!-- test -->
+      <zipfileset dir="${basedir}/jars/insane" prefix="${derby.bin}/test" includes="derbyTesting.jar"/>
+      <zipfileset dir="${basedir}/java/testing" prefix="${derby.bin}/test" 
+                  includes="README.htm"/>
+      <zipfileset dir="${basedir}/tools/java" prefix="${derby.bin}/test" 
+                  includes="jakarta-oro-2.0.8.jar"/>
+    </zip>
+  </target>
+
+  <target name="bin.tgz" depends="init">
+    <tar destfile="${release.dir}/${derby.bin}.tar.gz"
+         compression="gzip" longfile="gnu">
+      <!-- top-level -->
+      <tarfileset dir="${lf.dir}" includes="CHANGES,COPYRIGHT,LICENSE,KEYS,NOTICE,RELEASE-NOTES.html,frameworks.DEPRECATED.txt"
+                  prefix="${derby.bin}/"/>
+      <tarfileset dir="${basedir}" includes="index.html" prefix="${derby.bin}/"/>
+      <!-- bin -->
+      <tarfileset dir="${basedir}/bin" prefix="${derby.bin}/bin" 
+                  mode="755" includes="*"/>
+      <!-- demo -->
+      <tarfileset dir="${derby.demo.src.dir}" prefix="${derby.bin}/demo/programs" 
+                  excludes="**/build.xml,toursdb/toursdb**,toursdb/derby.log"/>
+      <tarfileset file="${derby.demo.src.dir}/toursdb/toursdb.xml"
+                  fullpath="${derby.bin}/demo/programs/toursdb/build.xml"/>
+      <tarfileset file="${derby.demo.src.dir}/toursdb/toursdb_readme.html"
+                  fullpath="${derby.bin}/demo/programs/toursdb/toursdb_readme.html"/>
+      <tarfileset file="${derby.drda.dir}/drda/template.policy"
+                  fullpath="${derby.bin}/demo/templates/server.policy"/>
+      <tarfileset dir="${basedir}/classes" includes="SimpleApp.class"
+                  prefix="${derby.bin}/demo/programs/simple"/>
+      <tarfileset dir="${basedir}/classes" includes="SimpleNetwork*.class"
+                  prefix="${derby.bin}/demo/programs/nserverdemo"/>
+      <tarfileset dir="${basedir}/classes/nserverdemo" includes="*.class"
+                  prefix="${derby.bin}/demo/programs/nserverdemo"/>
+      <tarfileset dir="${basedir}/java/demo/toursdb" includes="toursdb/**,toursdb.jar"
+                  prefix="${derby.bin}/demo/databases"/>
+      <tarfileset dir="${basedir}/classes" includes="Wwd*.class"
+                  prefix="${derby.bin}/demo/programs/workingwithderby"/>
+      <!-- docs -->
+      <tarfileset dir="${docs.out}" includes="**/*.html,**/*.jpg,**/*.gif"
+		          prefix="${derby.bin}/docs/html"/>
+      <tarfileset dir="${docs.out}" includes="**/*.pdf"
+	              prefix="${derby.bin}/docs/pdf"/>
+      <!-- frameworks -->
+      <tarfileset dir="${basedir}/frameworks" prefix="${derby.bin}/frameworks" includes="**/*.html"/> 
+      <tarfileset dir="${basedir}/frameworks" prefix="${derby.bin}/frameworks" includes="**/bin/*" mode="755"/> 
+      <!-- javadoc -->
+      <tarfileset dir="${basedir}/javadoc/publishedapi" prefix="${derby.bin}/javadoc" includes="**"/>   
+      <!-- lib -->
+      <tarfileset dir="${basedir}/jars/insane" prefix="${derby.bin}/lib" includes="derby*.*"
+	              excludes="derby_core_plugin*,derbyTesting.jar"/>
+      <!-- test -->
+      <tarfileset dir="${basedir}/jars/insane" prefix="${derby.bin}/test" includes="derbyTesting.jar"/>
+      <tarfileset dir="${basedir}/java/testing" prefix="${derby.bin}/test" 
+                  includes="README.htm"/>
+      <tarfileset dir="${basedir}/tools/java" prefix="${derby.bin}/test" 
+                  includes="jakarta-oro-2.0.8.jar"/>
+    </tar>
+  </target>
+
+  <!-- lib distribution -->
+  <target name="lib" depends="lib.zip,lib.tgz"/>
+  <target name="lib.zip" depends="init">
+    <zip destfile="${release.dir}/${derby.lib}.zip"
+	     compress="true">
+      <zipfileset dir="${crlf.dir}" includes="CHANGES,COPYRIGHT,LICENSE,KEYS,NOTICE,RELEASE-NOTES.html"
+      			  prefix="${derby.lib}/"/>
+      <zipfileset dir="${basedir}/jars/insane" prefix="${derby.lib}/lib" includes="derby*.*"
+	              excludes="derby_core_plugin*,derbyTesting.jar"/>
+      <zipfileset dir="${basedir}/jars/insane" prefix="${derby.lib}/test" includes="derbyTesting.jar"/>
+      <zipfileset dir="${basedir}/java/testing" prefix="${derby.lib}/test" 
+                  includes="README.htm"/>
+      <zipfileset dir="${basedir}/tools/java" prefix="${derby.lib}/test" 
+                  includes="jakarta-oro-2.0.8.jar"/>
+    </zip>
+  </target>
+  <target name="lib.tgz">
+    <tar destfile="${release.dir}/${derby.lib}.tar.gz"
+	     compression="gzip">
+      <tarfileset dir="${lf.dir}" includes="CHANGES,COPYRIGHT,LICENSE,KEYS,NOTICE,RELEASE-NOTES.html"
+      			  prefix="${derby.lib}/"/>
+      <tarfileset dir="${basedir}/jars/insane" prefix="${derby.lib}/lib" includes="derby*.*"
+	              excludes="derby_core_plugin*,derbyTesting.jar"/>
+      <tarfileset dir="${basedir}/jars/insane" prefix="${derby.lib}/test" includes="derbyTesting.jar"/>
+      <tarfileset dir="${basedir}/java/testing" prefix="${derby.lib}/test" 
+                  includes="README.htm"/>
+      <tarfileset dir="${basedir}/tools/java" prefix="${derby.lib}/test" 
+                  includes="jakarta-oro-2.0.8.jar"/>
+    </tar>
+  </target>
+
+  <!-- lib-debug distribution -->
+  <target name="lib-debug" depends="lib-debug.zip,lib-debug.tgz"/>
+  <target name="lib-debug.zip" depends="init">
+    <zip destfile="${release.dir}/${derby.lib-debug}.zip"
+	     compress="true">
+      <zipfileset dir="${crlf.dir}" includes="CHANGES,COPYRIGHT,LICENSE,KEYS,NOTICE,RELEASE-NOTES.html"
+      			  prefix="${derby.lib-debug}/"/>
+      <zipfileset dir="${basedir}/jars/sane" prefix="${derby.lib-debug}/lib" includes="derby*.*"
+	              excludes="derby_core_plugin*,derbyTesting.jar"/>
+      <zipfileset dir="${basedir}/jars/sane" prefix="${derby.lib-debug}/test" includes="derbyTesting.jar"/>
+      <zipfileset dir="${basedir}/java/testing" prefix="${derby.lib-debug}/test" 
+                  includes="README.htm"/>
+      <zipfileset dir="${basedir}/tools/java" prefix="${derby.lib-debug}/test" 
+                  includes="jakarta-oro-2.0.8.jar"/>
+    </zip>
+  </target>
+  <target name="lib-debug.tgz">
+    <tar destfile="${release.dir}/${derby.lib-debug}.tar.gz"
+	     compression="gzip">
+      <tarfileset dir="${lf.dir}" includes="CHANGES,COPYRIGHT,LICENSE,KEYS,NOTICE,RELEASE-NOTES.html"
+      			  prefix="${derby.lib-debug}/"/>
+      <tarfileset dir="${basedir}/jars/sane" prefix="${derby.lib-debug}/lib" includes="derby*.*"
+	              excludes="derby_core_plugin*,derbyTesting.jar"/>
+      <tarfileset dir="${basedir}/jars/sane" prefix="${derby.lib-debug}/test" includes="derbyTesting.jar"/>
+      <tarfileset dir="${basedir}/java/testing" prefix="${derby.lib-debug}/test" 
+                  includes="README.htm"/>
+      <tarfileset dir="${basedir}/tools/java" prefix="${derby.lib-debug}/test" 
+                  includes="jakarta-oro-2.0.8.jar"/>
+    </tar>
+  </target>
+
+  <!-- src distribution -->
+  <target name="src" depends="src.zip,src.tgz"/>
+  <target name="src.zip" depends="init">
+    <zip destfile="${release.dir}/${derby.src}.zip">
+      <zipfileset dir="${basedir}" prefix="${derby.src}"
+         includes="${src.includes}"
+         excludes="${src.excludes}"/>
+    </zip>
+  </target>
+  <target name="src.tgz">
+    <tar destfile="${release.dir}/${derby.src}.tar.gz"
+         compression="gzip" longfile="gnu">
+      <tarfileset dir="${basedir}" prefix="${derby.src}"
+         includes="${src.includes}"
+         excludes="${src.excludes}"/>
+    </tar>
+  </target>
+
+  <!-- generate the md5 and pgp checksums for a target -->
+  <target name="sign" depends="sign.bin,sign.lib,sign.src"/>
+  <target name="sign.bin" depends="init">
+    <antcall target="md5">
+      <param name="sign.archive" value="${release.dir}/${derby.bin}.zip"/>
+    </antcall>
+    <antcall target="md5">
+      <param name="sign.archive" value="${release.dir}/${derby.bin}.tar.gz"/>
+    </antcall>
+    <antcall target="pgp">
+      <param name="sign.archive" value="${release.dir}/${derby.bin}.zip"/>
+    </antcall>
+    <antcall target="pgp">
+      <param name="sign.archive" value="${release.dir}/${derby.bin}.tar.gz"/>
+    </antcall>
+  </target>
+  <target name="sign.lib" depends="init">
+    <antcall target="md5">
+      <param name="sign.archive" value="${release.dir}/${derby.lib}.zip"/>
+    </antcall>
+    <antcall target="md5">
+      <param name="sign.archive" value="${release.dir}/${derby.lib}.tar.gz"/>
+    </antcall>
+    <antcall target="pgp">
+      <param name="sign.archive" value="${release.dir}/${derby.lib}.zip"/>
+    </antcall>
+    <antcall target="pgp">
+      <param name="sign.archive" value="${release.dir}/${derby.lib}.tar.gz"/>
+    </antcall>
+  </target>
+  <target name="sign.src" depends="init">
+    <antcall target="md5">
+      <param name="sign.archive" value="${release.dir}/${derby.src}.zip"/>
+    </antcall>
+    <antcall target="md5">
+      <param name="sign.archive" value="${release.dir}/${derby.src}.tar.gz"/>
+    </antcall>
+    <antcall target="pgp">
+      <param name="sign.archive" value="${release.dir}/${derby.src}.zip"/>
+    </antcall>
+    <antcall target="pgp">
+      <param name="sign.archive" value="${release.dir}/${derby.src}.tar.gz"/>
+    </antcall>
+  </target>
+
+  <target name="md5">
+    <exec executable="${md5.exec}" output="${sign.archive}.md5">
+      <arg line="${md5.options} ${sign.archive}"/>
+    </exec>
+  </target>
+
+  <target name="pgp">
+    <exec executable="${pgp.exec}">
+      <arg line="${pgp.options} ${sign.archive}"/>
+    </exec>
+  </target>
+
+  <!-- remove all the files generated by the release targets. -->
+  <target name="clean">
+    <delete>
+      <fileset dir="${release.dir}" includes="maintversion.properties,db-derby*.zip*,db-derby*.tar.gz*"/>
+    </delete>
+  </target>
+
+  <!-- bumps the last part of the version string to the next digit. -->
+  <target name="bumplastdigit">
+    <propertyfile file="${basedir}/tools/ant/properties/release.properties">
+      <entry key="maint" type="int" operation="+" value="1" pattern="0000000"/>
+    </propertyfile>
+    <java classname="org.apache.derbyBuild.maintversion2props">
+      <classpath path="${out.dir}"/>
+      <arg value="${basedir}/tools/ant/properties/release.properties"/>
+      <arg value="${basedir}/tools/release/maintversion.properties"/>
+    </java>
+    <antcall target="regex.masters"/>
+  </target>
+
+  <!-- this target contains the list of test masters which contain the version string. -->
+  <target name="regex.masters">
+    <property file="${basedir}/tools/release/maintversion.properties"/>
+    <antcall target="regex.version"> 
+      <param name="regex.file" value="java/testing/org/apache/derbyTesting/functionTests/master/DerbyNet/metadata.out"/>
+    </antcall>
+    <antcall target="regex.version"> 
+      <param name="regex.file" value="java/testing/org/apache/derbyTesting/functionTests/master/DerbyNet/odbc_metadata.out"/>
+    </antcall>
+    <antcall target="regex.version"> 
+      <param name="regex.file" value="java/testing/org/apache/derbyTesting/functionTests/master/DerbyNetClient/metadata.out"/>
+    </antcall>
+    <antcall target="regex.version"> 
+      <param name="regex.file" value="java/testing/org/apache/derbyTesting/functionTests/master/DerbyNetClient/odbc_metadata.out"/>
+    </antcall>
+    <antcall target="regex.version"> 
+      <param name="regex.file" value="java/testing/org/apache/derbyTesting/functionTests/master/DerbyNetClient/metadata.out"/>
+    </antcall>
+    <antcall target="regex.version"> 
+      <param name="regex.file" value="java/testing/org/apache/derbyTesting/functionTests/master/DerbyNetClient/metadata.out"/>
+    </antcall>
+    <antcall target="regex.version"> 
+      <param name="regex.file" value="java/testing/org/apache/derbyTesting/functionTests/master/metadata.out"/>
+    </antcall>
+    <antcall target="regex.version"> 
+      <param name="regex.file" value="java/testing/org/apache/derbyTesting/functionTests/master/odbc_metadata.out"/>
+    </antcall>
+    <antcall target="regex.version"> 
+      <param name="regex.file" value="java/testing/org/apache/derbyTesting/functionTests/master/NSinSameJVM.out"/>
+    </antcall>
+    <antcall target="regex.version"> 
+      <param name="regex.file" value="java/testing/org/apache/derbyTesting/functionTests/master/testProperties.out"/>
+    </antcall>
+  </target>
+
+  <target name="regex.version">
+    <replaceregexp file="${regex.file}" match="${major}\.${minor}\.\d+\.\d+" 
+                   replace="${major}.${minor}.${interim}.${point}" flags="g"/>
+  </target>
+
+</project>

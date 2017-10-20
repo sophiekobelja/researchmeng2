@@ -1,0 +1,33 @@
+APACHE DERBY STATUS:
+Last modified at [$Date: 2005-02-10 12:37:41 -0800 (Thu, 10 Feb 2005) $] by $Author: fuzzylogic $.
+
+Web site: http://incubator.apache.org/derby/
+
+This is the status file for the Derby 10.0 branch. The real STATUS file can
+be found in the trunk, viewable on the web at:
+
+http://svn.apache.org/viewcvs.cgi/incubator/derby/code/trunk/STATUS?view=markup
+
+Releases:
+
+ * 10.0.2.1 - First official Apache Derby release.
+
+Note that the 10.0 branch is versioned 10.0.2.2 when checked out from
+Subversion to indicate that additional changes have been made to the branch
+which were not in the 10.0.2.1 release.
+
+PENDING ISSUES
+==============
+
+None.
+ 
+
+RELEASE STATUS
+==============
+
+Since the release of Derby 10.0.2.1, there have been no requests or discussion
+for a 10.0.2.2 bugfix release, and minimal changes have been committed to the
+branch, with the bulk of development happening on the trunk, as expected.
+
+Check the CHANGES file for a list of changes which have been made since the
+release of 10.0.2.1.

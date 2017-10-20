@@ -1,0 +1,60 @@
+FUNCTION_CAT,FUNCTION_SCHEM,FUNCTION_NAME,REMARKS,SPECIFIC_NAME
+null,APP,DUMMY1,java.some.func,xxxxGENERATED-IDxxxx
+null,APP,DUMMY2,java.some.func,xxxxGENERATED-IDxxxx
+null,APP,DUMMY3,java.some.func,xxxxGENERATED-IDxxxx
+null,APP,DUMMY4,java.some.func,xxxxGENERATED-IDxxxx
+null,SYSCS_UTIL,SYSCS_CHECK_TABLE,org.apache.derby.catalog.SystemProcedures.SYSCS_CHECK_TABLE,xxxxGENERATED-IDxxxx
+null,SYSCS_UTIL,SYSCS_GET_DATABASE_PROPERTY,org.apache.derby.catalog.SystemProcedures.SYSCS_GET_DATABASE_PROPERTY,xxxxGENERATED-IDxxxx
+null,SYSCS_UTIL,SYSCS_GET_RUNTIMESTATISTICS,org.apache.derby.catalog.SystemProcedures.SYSCS_GET_RUNTIMESTATISTICS,xxxxGENERATED-IDxxxx
+FUNCTION_CAT,FUNCTION_SCHEM,FUNCTION_NAME,REMARKS,SPECIFIC_NAME
+null,APP,DUMMY1,java.some.func,xxxxGENERATED-IDxxxx
+null,APP,DUMMY2,java.some.func,xxxxGENERATED-IDxxxx
+null,APP,DUMMY3,java.some.func,xxxxGENERATED-IDxxxx
+null,APP,DUMMY4,java.some.func,xxxxGENERATED-IDxxxx
+null,SYSCS_UTIL,SYSCS_CHECK_TABLE,org.apache.derby.catalog.SystemProcedures.SYSCS_CHECK_TABLE,xxxxGENERATED-IDxxxx
+null,SYSCS_UTIL,SYSCS_GET_DATABASE_PROPERTY,org.apache.derby.catalog.SystemProcedures.SYSCS_GET_DATABASE_PROPERTY,xxxxGENERATED-IDxxxx
+null,SYSCS_UTIL,SYSCS_GET_RUNTIMESTATISTICS,org.apache.derby.catalog.SystemProcedures.SYSCS_GET_RUNTIMESTATISTICS,xxxxGENERATED-IDxxxx
+FUNCTION_CAT,FUNCTION_SCHEM,FUNCTION_NAME,REMARKS,SPECIFIC_NAME
+null,SYSCS_UTIL,SYSCS_CHECK_TABLE,org.apache.derby.catalog.SystemProcedures.SYSCS_CHECK_TABLE,xxxxGENERATED-IDxxxx
+null,SYSCS_UTIL,SYSCS_GET_DATABASE_PROPERTY,org.apache.derby.catalog.SystemProcedures.SYSCS_GET_DATABASE_PROPERTY,xxxxGENERATED-IDxxxx
+null,SYSCS_UTIL,SYSCS_GET_RUNTIMESTATISTICS,org.apache.derby.catalog.SystemProcedures.SYSCS_GET_RUNTIMESTATISTICS,xxxxGENERATED-IDxxxx
+FUNCTION_CAT,FUNCTION_SCHEM,FUNCTION_NAME,REMARKS,SPECIFIC_NAME
+null,SYSCS_UTIL,SYSCS_GET_DATABASE_PROPERTY,org.apache.derby.catalog.SystemProcedures.SYSCS_GET_DATABASE_PROPERTY,xxxxGENERATED-IDxxxx
+null,SYSCS_UTIL,SYSCS_GET_RUNTIMESTATISTICS,org.apache.derby.catalog.SystemProcedures.SYSCS_GET_RUNTIMESTATISTICS,xxxxGENERATED-IDxxxx
+TABLE_SCHEM,TABLE_CATALOG
+APP,null
+NULLID,null
+SQLJ,null
+SYS,null
+SYSCAT,null
+SYSCS_DIAG,null
+SYSCS_UTIL,null
+SYSFUN,null
+SYSIBM,null
+SYSPROC,null
+SYSSTAT,null
+TABLE_SCHEM,TABLE_CATALOG
+SYS,null
+SYSCAT,null
+SYSCS_DIAG,null
+SYSCS_UTIL,null
+SYSFUN,null
+SYSIBM,null
+SYSPROC,null
+SYSSTAT,null
+TABLE_SCHEM,TABLE_CATALOG
+APP,null
+getClientInfoProperties():
+FAIL -- unexpected exception
+SQLSTATE(0A000):java.sql.SQLException: Feature not implemented: getClientInfoProperties ().
+Caused by: org.apache.derby.client.am.SqlException: Feature not implemented: getClientInfoProperties ().
+	... 4 more
+getFunctionParameters():
+java.lang.AbstractMethodError
+getClientInfoProperties():
+java.lang.AbstractMethodError
+getSchemas():
+FAIL -- unexpected exception
+SQLSTATE(0A000):java.sql.SQLException: Feature not implemented: getSchemas (String, String).
+Caused by: org.apache.derby.client.am.SqlException: Feature not implemented: getSchemas (String, String).
+	... 4 more

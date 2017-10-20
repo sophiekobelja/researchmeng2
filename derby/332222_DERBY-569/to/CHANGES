@@ -1,0 +1,5 @@
+Changes in Derby 10.2
+    
+ *) The Network Server no longer prints the message "Connection Number: N"
+    to the console unless derby.drda.logConnections is set to true (DERBY-569)
+    [ Bryan Pendleton ]

@@ -1,0 +1,43 @@
+grant codeBase "${derby.install.url}derby.jar"
+{
+//
+// These permissions are needed for everyday, embedded Derby usage.
+//
+  permission java.lang.RuntimePermission "createClassLoader";
+  permission java.util.PropertyPermission "derby.*", "read";
+  permission java.util.PropertyPermission "user.dir", "read";
+  permission java.util.PropertyPermission "derby.storage.jvmInstanceId", 
+      "write"; 
+  permission java.io.FilePermission "${derby.system.home}","read";
+  permission java.io.FilePermission "${derby.system.home}${/}-", "read,write,delete";
+
+//
+// This permission lets you backup and restore databases
+// to and from arbitrary locations in your file system.
+//
+// This permission also lets you import/export data to and from
+// arbitrary locations in your file system.
+//
+// You may want to restrict this access to specific directories.
+//
+  permission java.io.FilePermission "<<ALL FILES>>", "read,write,delete";
+};
+
+grant codeBase "${derby.install.url}derbynet.jar"
+{
+//
+// This permission lets the Network Server manage connections from clients.
+//
+
+// Accept connections from any host. Derby is listening to the host
+// interface specified via the -h option to "NetworkServerControl
+// start" on the command line, via the address parameter to the
+// org.apache.derby.drda.NetworkServerControl constructor in the API
+// or via the property derby.drda.host; the default is localhost.
+// You may want to restrict allowed hosts, e.g. to hosts in a specific
+// subdomain, e.g. "*.acme.com".
+
+  permission java.net.SocketPermission "*", "accept"; 
+
+};
+

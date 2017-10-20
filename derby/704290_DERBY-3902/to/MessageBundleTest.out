@@ -1,0 +1,8 @@
+.
+testSQLStateOrphanedIds used 188 ms .
+testMessageIdOrphanedIds used 0 ms .
+testMessageBundleOrphanedMessages used 0 ms 
+Time: 0.203
+
+OK (3 tests)
+

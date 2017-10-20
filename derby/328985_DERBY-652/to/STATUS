@@ -1,0 +1,125 @@
+APACHE DERBY STATUS:
+Last modified at [$Date: 2005-10-27 17:02:52 -0700 (Thu, 27 Oct 2005) $] by $Author: fuzzylogic $.
+
+Web site: http://db.apache.org/derby/
+
+Project Status
+
+  Description
+
+  "Derby" began as a snapshot of the IBM's Cloudscape Java relational database. IBM
+  contributed the code to The Apache Software Foundation and 
+  bases future versions of IBM Cloudscape on the Apache-managed code.
+
+  To participate in Derby, you should join the mailing list. Just 
+  send an empty message to derby-dev-subscribe@db.apache.org.
+
+  Derby graduated from incubation in July, 2005 and is now a
+  full-fledged Apache DB project..
+
+Project info
+
+  * The Apache DB project owns the Derby subproject, and the subproject
+    follows the Apache DB PMC's direction. Significant contributors to this sub-
+    project (for example, after a significant interval of sustained
+    contribution) will be proposed for commit access to the codebase.
+
+  * The Derby sub-project's modules will be available as distinct and discrete downloads.
+
+Releases from trunk:
+
+ * 10.2.0.0 : In development 
+ * 10.1.1.0 : Released 8/3/2005
+ * 10.0.2.1 : Released 12/06/2004
+
+PENDING ISSUES
+==============
+
+None.
+
+RESOLVED ISSUES SINCE LAST STATUS
+=================================
+
+
+[VOTE] to sunset support for jdk1.3 and to support jdbc4.0 in release 10.2.
+
+  See email thread: "[VOTE] Policy for supported platforms". Vote
+  ended on August 12, 2005.
+  Passed with +1 support votes from Lance Andersen, Rick Hillegas,
+  Shreyas Kaushik, and Francois Orsini.
+
+[VOTE] to re-enable the ANSI BOOLEAN datatype
+
+  See email thread: "[VOTE] Support the ANSI-SQL standard BOOLEAN
+  datatype." Initiated on August 10, 2005. Vote declared over on
+  October 27, 2005.
+  Passed with +1 votes from Lance Andersen, Satheesh Bandaram,
+  Jeremy Boynes, Rick Hillegas, Shreyas Kaushik, Jeffrey Lichtman,
+  Amit Modi, Francois Orsini, Suresh Thalamati, David Van Couvering.
+  Kathey Marsden voted -1 if the proposal meant that jdbc clients
+  would mis-report BOOLEAN column types as SMALLINT. However, the
+  implementation will address this concern and clients will see
+  these columns correctly typed as BOOLEAN.
+
+[VOTE] Require JUnit jar to build Derby
+
+  See email thread "VOTE: Require JUnit jar to build Derby, was: JUnit
+  license, was: subversion etiquette" Voted called on 9/19/2005 and
+  ended on 9/23/2005.
+  Passed with +1 votes from Jeremy Boynes, Bernt Johnsen, Oyvind
+  Bakksjo, Dyre Tjeldvoll, Lance Andersen, Rick Hillegas, Dan Debrunner.
+  One 0 vote from Andrew McIntyre.
+
+
+
+OTHER NEWS
+==========
+
+A 10.1 bugfix release, 10.1.2.x is in the works. Subsequent 
+Derby 10.1 releases are tracked in the 10.1 STATUS file:
+
+http://svn.apache.org/repos/asf/db/derby/code/branches/10.1/STATUS
+
+
+A wiki for Derby has been set up on the big Apache Wiki farm:
+
+http://wiki.apache.org/db-derby/
+
+
+The Derby Logo contest has been restarted. New submissions for logos can be
+attached to JIRA entry Derby-297.
+
+http://issues.apache.org/jira/browse/DERBY-297
+
+
+RELEASE STATUS
+==============
+
+Derby 10.2.0.0 is currently in the alpha stages.
+
+No currently outstanding issues.
+
+
+
+
+References:
+ 
+item            type      reference
+Status file     www       http://svn.apache.org/repos/asf/db/derby/code/trunk/STATUS
+Website         www       http://db.apache.org/derby/
+Mailing list    dev       derby-dev@db.apache.org
+Mailing list    users     derby-user@db.apache.org
+Source code     SVN       /repos/asf/db/derby/code/trunk/
+Committers      jta       Jean Anderson (CLA on file)
+Committers      satheesh  Satheesh Bandaram (CLA on file)
+Committers      jboynes   Jeremy Boynes (CLA on file)
+Committers      djd       Daniel Debrunner (CLA on file)
+Committers      kmarsden  Katherine Marsden (CLA on file)
+Committers      mikem     Mike Matrigali (CLA on file)
+Committers      mcintyre  Samuel McIntyre (CLA on file)
+Committers      coar      Ken Coar (CLA on file)
+Committers      tmnk      Tomohito Nakayama (CLA on file)
+Committers      bernt     Bernt M. Johnsen (CLA on file)
+Committers      oyvind    Øyvind Bakksjø (CLA on file)
+Committers      davidvc   David Van Couvering (CLA on file)
+

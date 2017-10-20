@@ -1,0 +1,6 @@
+main-NSinSameJVM: Derby drivers loaded
+Server is ready to accept connections on port 20000.
+main-NSinSameJVM: NetworkServer started
+main-NSinSameJVM: Connected to database NSinSameJVMTestDB;create=true
+getting ready to shutdown
+Shutdown successful.

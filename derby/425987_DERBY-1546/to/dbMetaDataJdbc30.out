@@ -1,0 +1,30 @@
+Test dbMetaDataJdbc30 starting
+JDBC Driver 'Apache Derby Embedded JDBC Driver', version 10.2 (10.2.0.5 alpha)
+DatabaseMetaData.getURL test passed
+supportsSavepoints() : true
+supportsNamedParameters() : false
+supportsMultipleOpenResults() : true
+supportsGetGeneratedKeys() : false
+supportsResultSetHoldability(HOLD_CURSORS_OVER_COMMIT) : true
+supportsResultSetHoldability(CLOSE_CURSORS_AT_COMMIT) : true
+getJDBCMajorVersion()/getJDBCMinorVersion() : AS EXPECTED
+getSQLStateType() : 2
+getResultSetHoldability() : 1
+getDatabaseMajorVersion() : 10
+getDatabaseMinorVersion() : 2
+supportsStatementPooling() : false
+getMaxColumnNameLength() = 128
+getMaxCursorNameLength() = 128
+getMaxSchemaNameLength() = 128
+getMaxProcedureNameLength() = 128
+getMaxTableNameLength() = 128
+getMaxUserNameLength() = 30
+getSuperTypes() with null :
+EXPECTED: Empty ResultSet
+getSuperTables() with null :
+EXPECTED: Empty ResultSet
+getAttributes() with null :
+EXPECTED: Empty ResultSet
+locatorsUpdateCopy(): 
+Returned: false
+Test dbMetaDataJdbc30 finished

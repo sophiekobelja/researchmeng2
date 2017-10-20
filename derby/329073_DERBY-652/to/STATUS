@@ -1,0 +1,80 @@
+APACHE DERBY STATUS:
+Last modified at [$Date: 2005-10-27 20:55:07 -0700 (Thu, 27 Oct 2005) $] by $Author: fuzzylogic $.
+
+Web site: http://db.apache.org/derby/
+
+Project Status
+
+  Description
+
+  "Derby" began as a snapshot of the IBM's Cloudscape Java relational database.
+  IBM contributed the code to The Apache Software Foundation and
+  bases future versions of IBM Cloudscape on the Apache-managed code.
+
+  To participate in Derby, you should join the mailing list. Just
+  send an empty message to derby-dev-subscribe@db.apache.org.
+
+  Derby graduated from incubation in July, 2005 and is now a
+  full-fledged Apache DB project..
+
+
+Project info
+
+  * The Apache DB project owns the Derby subproject, and the subproject
+    follows the Apache DB PMC's direction. Significant contributors to this sub-
+    project (for example, after a significant interval of sustained
+    contribution) will be proposed for commit access to the codebase.
+
+  * The Derby sub-project's modules will be available as distinct and discrete
+    downloads.
+
+	
+Releases from the 10.1 branch:
+
+ * 10.1.2.1 : In development
+ * 10.1.2.0 : Unreleased
+ * 10.1.1.2 : Unreleased
+ * 10.1.1.1 : Snapshot, posted 10/5/2005
+ * 10.1.1.0 : Released 8/3/2005
+
+PENDING ISSUES
+==============
+
+ The 10.1.2.x release is currently blocked by the following issues:
+
+ * DERBY-657: Release archives should have executable bits set for scripts
+              and text files should have proper line endings.
+              http://issues.apache.org/jira/browse/DERBY-657
+
+ * DERBY-652: Documentation and demos have incubator references
+              http://issues.apache.org/jira/browse/DERBY-652
+
+ The first 10.1.2.x will be 10.1.2.1 if no further showstopper issues are
+ found.
+
+RESOLVED ISSUES SINCE LAST STATUS
+=================================
+
+
+OTHER NEWS
+==========
+
+ The 10.1 branch was created on 6/10/2005 at SVN revision 189890.
+
+ The 10.1 branch can be checked out of Subversion with the following
+ command:
+
+ svn co https://svn.apache.org/repos/asf/db/derby/branches/10.1/ 
+
+
+RELEASE STATUS
+==============
+
+ A 10.1.2.x release is underway. A full list of changes from the original
+ 10.1.1.0 release to 10.1.2.0 can be found here:
+
+ http://issues.apache.org/jira/secure/ReleaseNote.jspa?version=12310270&styleName=Html&projectId=10594&Create=Create
+
+ A 10.1.2.0 release candidate was posted on 10/22/2005. Several issues were
+ found with the release candidate. The remaining issues are listed in the
+ pending issues section above.
